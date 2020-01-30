@@ -48,7 +48,7 @@ products = []
   if prices.size > 0 then
     prices.each do |l|
       type = l.css('.radio_label').text
-      price = l.css('.price_comb').text.split('/').first
+      price = l.css('.price_comb').text.split(' €').first
       products.push('name' => name + ' - ' + type, 'price' => price, 'image_url' => image_url)
     end
   else
