@@ -5,15 +5,15 @@ require 'csv'
 
 #Entry data
 # puts 'Enter category URL:'
-# url = gets.chomp
+# URL = gets.chomp
 # puts 'Enter csv file name:'
 # file = gets.chomp
-url = 'https://www.petsonic.com/snacks-higiene-dental-para-perros/'
-file = 'file'
+URL = 'https://www.petsonic.com/snacks-higiene-dental-para-perros/'
+FILE = 'file'
 
 #Parsing category page
 puts 'Start open category page...'
-html = Curl.get(url)
+html = Curl.get(URL)
 
 #TODO recursion def
 puts 'Start parsing category page...'
@@ -34,10 +34,11 @@ products_url.each do |url|
   name = doc.xpath('//h1').text
   image = doc.xpath("//img[@id='bigpic']/@src")
   prices = doc.xpath("//label[contains(@class, 'label_comb_price')]").each do |l|
-    name = l.xpath("//span[contains(@class, 'radio_label')]").text
-    price = l.xpath("//span[contains(@class, 'price_comb')]").text
+    puts l.xpath("//span[@class = 'price_comb']").text.split('/').first()
+    # name = l.xpath("//span[contains(@class, 'radio_label')]").text
+    # price = l.xpath("//span[contains(@class, 'price_comb')]").text
     #TODO debug
-    puts name + ' = ' + price
+    # puts name + ' = ' + price
   end
 end
 puts 'End...'
