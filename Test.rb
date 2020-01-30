@@ -25,4 +25,19 @@ end
 #TODO debug
 # puts products_url
 
-
+#Parsing pages
+puts 'Start parsing pages...'
+products = []
+products_url.each do |url|
+  html = Curl.get(url)
+  doc = Nokogiri::HTML(html.body)
+  name = doc.xpath('//h1').text
+  image = doc.xpath("//img[@id='bigpic']/@src")
+  prices = doc.xpath("//label[contains(@class, 'label_comb_price')]").each do |l|
+    name = l.xpath("//span[contains(@class, 'radio_label')]").text
+    price = l.xpath("//span[contains(@class, 'price_comb')]").text
+    #TODO debug
+    puts name + ' = ' + price
+  end
+end
+puts 'End...'
