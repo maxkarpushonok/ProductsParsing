@@ -4,31 +4,40 @@ require 'nokogiri'
 require 'csv'
 
 #Entry data
-# puts 'Enter category URL:'
-# URL = gets.chomp
-# puts 'Enter csv file name:'
-# file = gets.chomp
-URL = 'https://www.petsonic.com/semihumedos-para-perros/'
-FILE = 'file'
+puts 'Enter category URL:'
+URL = gets.chomp
+puts 'Enter csv file name:'
+FILE = gets.chomp
+# URL = 'https://www.petsonic.com/snacks-higiene-dental-para-perros/'
+# FILE = 'file'
 
 #Parsing category page
-puts 'Start open category page...'
-html = Curl.get(URL)
-
-#TODO recursion def
 puts 'Start parsing category page...'
-products_url = []
-doc = Nokogiri::HTML(html.body)
-doc.css('a.product_img_link').each do |a|
-  products_url.push(a['href'])
+@products_url = []
+@i = 1;
+def parsing(url)
+  html = Curl.get(url)
+  doc = Nokogiri::HTML(html.body)
+  doc.css('a.product_img_link').each do |a|
+    @products_url.push(a['href'])
+  end
+  @i += 1
+  next_url = URL + '?p=' + @i.to_s
+  if Curl.get(next_url).body.size > 0 then
+    puts next_url
+    parsing(next_url)
+  end
 end
+
+parsing(URL)
+
 #TODO debug
 # puts products_url
 
 #Parsing pages
 puts 'Start parsing pages...'
 products = []
-products_url.each do |url|
+@products_url.each do |url|
   html = Curl.get(url)
   doc = Nokogiri::HTML(html.body)
   name = doc.xpath('//h1').text
