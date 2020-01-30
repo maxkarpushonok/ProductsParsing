@@ -25,6 +25,7 @@ end
 #TODO debug
 # puts products_url
 
+#TODO pages with one price
 #Parsing pages
 puts 'Start parsing pages...'
 products = []
@@ -36,10 +37,19 @@ products_url.each do |url|
   doc.xpath("//label[contains(@class, 'label_comb_price')]").each do |l|
     type = l.css('.radio_label').text
     price = l.css('.price_comb').text.split('/').first
-    products.push('name'=> name + ' ' + type, 'price' => price, 'image_url' => image_url)
+    products.push('name'=> name + ' - ' + type, 'price' => price, 'image_url' => image_url)
   end
 end
 
-puts products
+#TODO debug
+# puts products
 
-puts 'End...'
+#Save to .csv
+puts 'Start saving to ' + FILE + '.csv file...'
+CSV.open(FILE + '.csv', 'w') do |csv|
+  products.each { |p|
+    csv << [p['name'], p['price'], p['image_url']]
+  }
+end
+
+puts 'End.'
