@@ -3,18 +3,21 @@ require 'curb'
 require 'nokogiri'
 require 'csv'
 
-#Entry data
+# Entry data
 puts 'Enter category URL:'
 URL = gets.chomp
 puts 'Enter csv file name:'
 FILE = gets.chomp
-# URL = 'https://www.petsonic.com/snacks-higiene-dental-para-perros/'
+# TODO debug
+# URL = 'https://www.petsonic.com/barritas-para-perros/'
 # FILE = 'file'
 
-#Parsing category page
+# Parsing category page
 puts 'Start parsing category page...'
 @products_url = []
-@i = 1;
+@i = 1
+
+# Parsing method
 def parsing(url)
   html = Curl.get(url)
   doc = Nokogiri::HTML(html.body)
@@ -24,17 +27,16 @@ def parsing(url)
   @i += 1
   next_url = URL + '?p=' + @i.to_s
   if Curl.get(next_url).body.size > 0 then
-    puts next_url
     parsing(next_url)
   end
 end
 
 parsing(URL)
 
-#TODO debug
+# TODO debug
 # puts products_url
 
-#Parsing pages
+# Parsing pages
 puts 'Start parsing pages...'
 products = []
 @products_url.each do |url|
@@ -56,10 +58,10 @@ products = []
 
 end
 
-#TODO debug
+# TODO debug
 # puts products
 
-#Save to .csv
+# Save to .csv
 puts 'Start saving to ' + FILE + '.csv file...'
 CSV.open(FILE + '.csv', 'w') do |csv|
   products.each { |p|
