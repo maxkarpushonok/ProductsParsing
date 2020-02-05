@@ -10,7 +10,7 @@ puts 'Enter csv file name:'
 FILE = gets.chomp
 # TODO debug
 # URL = 'https://www.petsonic.com/barritas-para-perros/'
-# FILE = 'file'
+# FILE = 'file-new'
 
 # Parsing category page
 puts 'Start parsing category page...'
@@ -47,8 +47,10 @@ products = []
   prices = doc.xpath("//label[contains(@class, 'label_comb_price')]")
   if prices.size > 0 then
     prices.each do |l|
-      type = l.css('.radio_label').text
-      price = l.css('.price_comb').text.split(' €').first
+      # type = l.css('.radio_label').text
+      type = l.xpath(".//*[@class = 'radio_label']").text
+      # price = l.css('.price_comb').text.split(' €').first
+      price = l.xpath(".//*[@class = 'price_comb']").text.split(' €').first
       products.push('name' => name + ' - ' + type, 'price' => price, 'image_url' => image_url)
     end
   else
